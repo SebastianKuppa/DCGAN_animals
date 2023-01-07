@@ -39,3 +39,12 @@ class Discriminator(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
+
+
+class Generator(nn.Module):
+    def __init__(self, ngpu):
+        self.ngpu = ngpu
+        super(Generator, self).__init__()
+        self.model = nn.Sequential(
+
+        )
