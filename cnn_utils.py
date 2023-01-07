@@ -46,5 +46,27 @@ class Generator(nn.Module):
         self.ngpu = ngpu
         super(Generator, self).__init__()
         self.model = nn.Sequential(
-
+            # input Z going into convolution
+            nn.ConvTranspose2d(nz, ngf * 8, 4, 1, 0, bias=False),
+            nn.BatchNorm2d(ngf * 8),
+            nn.ReLU(inplace=True),
+            # state size (ngf*8)x4x4
+            nn.ConvTranspose2d(ngf * 8, ngf * 4, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ngf * 4),
+            nn.ReLU(inplace=True),
+            # state size (ngf*4)x8x8
+            nn.ConvTranspose2d(ngf * 4, ngf * 2, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ngf * 2),
+            nn.ReLU(inplace=True),
+            # state size (ngf*2)x16x16
+            nn.ConvTranspose2d(ngf * 2, ngf, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ngf),
+            nn.ReLU(inplace=True),
+            # state size (ngf)x32x32
+            nn.ConvTranspose2d(ngf, nc, 4, 2, 1, bias=False),
+            nn.Tanh()
+            # state size (nc)x64x64
         )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.model(x)
