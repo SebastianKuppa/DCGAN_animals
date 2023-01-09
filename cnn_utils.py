@@ -1,6 +1,9 @@
 # This file contains the convolutional neural network architectures
+import glob
+
 import torch
 from torch import nn
+from torch.utils.data import Dataset
 
 
 def weights_init(m: torch.Tensor) -> None:
@@ -70,3 +73,20 @@ class Generator(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
+
+
+class AnimalDataset(Dataset):
+    def __init__(self, root_dir='/content/drive/MyDrive/wild/'):
+        self.root_dir = root_dir
+        self.avg_pool = nn.AdaptiveAvgPool2d((64, 64))
+        self.img_dir = root_dir + '*.jpg'
+
+    def __len__(self):
+        return len(glob.glob(self.img_dir))
+
+    def __getitem__(self, idx):
+        image = cv2.imread(glob.glob(self.img_dir)[idx])/255.0
+        image = torch.Tensor(image)
+        image = image.permute(2, 0, 1)
+        image = self.avg_pool(image)
+        return image
