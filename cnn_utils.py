@@ -5,6 +5,8 @@ import torch
 from torch import nn
 from torch.utils.data import Dataset
 
+import cv2
+
 
 def weights_init(m: torch.Tensor) -> None:
     classname = m.__class__.__name__
