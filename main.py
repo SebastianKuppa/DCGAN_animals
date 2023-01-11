@@ -1,17 +1,26 @@
 import torch.cuda
 from torch.utils.data import DataLoader
 import torch.nn as nn
+import torch.optim as optim
 
 from cnn_utils import AnimalDataset, Discriminator, Generator
 
 batch_size = 32
 epochs = 20
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+lr = 0.0002
 
 if __name__ == '__main__':
+    # init loss function
     loss_function = nn.BCELoss()
+
     netD = Discriminator(ngpu=0)
     netG = Generator(ngpu=0)
+
+    # init optimizer for Discriminator and Generator
+    d_optim = optim.Adam(netD.parameters(), lr=lr, betas=(0.5, 0.999))
+    g_optim = optim.Adam(netG.parameters(), lr=lr, betas=(0.5, 0.999))
+
     train_set = AnimalDataset()
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
 
