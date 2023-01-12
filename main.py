@@ -26,10 +26,13 @@ if __name__ == '__main__':
 
     for epoch in range(epochs):
         for idx, (imgs,) in enumerate(train_loader):
+            # take images from dataset and feed to discriminator
             real_inputs = imgs.to(device)
             real_outputs = netD(real_inputs)
+            # create labels with value 1=real images
             real_label = torch.ones(real_inputs.shape[0], 1).to(device)
 
+            # create input noice tensor for generator
             noise = (torch.rand(real_inputs.shape[0], 100, 1, 1) - 0.5) / 0.5
             noise = noise.to(device)
 
@@ -41,3 +44,8 @@ if __name__ == '__main__':
             targets = torch.cat((real_label, fake_label), dim=0)
 
             d_loss = loss_function(outputs, targets)
+            d_optim.zero_grad()
+            d_loss.backward()
+            d_optim.step()
+
+
