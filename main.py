@@ -26,6 +26,8 @@ if __name__ == '__main__':
 
     for epoch in range(epochs):
         for idx, (imgs,) in enumerate(train_loader):
+            # training the discriminator
+            ###########################
             # take images from dataset and feed to discriminator
             real_inputs = imgs.to(device)
             real_outputs = netD(real_inputs)
@@ -40,7 +42,8 @@ if __name__ == '__main__':
             fake_outputs = netD(fake_inputs)
             fake_label = torch.zeros(fake_inputs.shape[0], 1).to(device)
 
-            outputs = torch.cat((real_outputs.view(-1).unsqueeze(1), fake_outputs.view(-1).unsqueeze(1)), dim=0)
+            outputs = torch.cat((real_outputs.view(-1).unsqueeze(1), fake_outputs.view(-1).unsqueeze(1)),
+                                dim=0)
             targets = torch.cat((real_label, fake_label), dim=0)
 
             d_loss = loss_function(outputs, targets)
@@ -48,4 +51,13 @@ if __name__ == '__main__':
             d_loss.backward()
             d_optim.step()
 
-
+            # training the generator
+            ###########################
+            # the goal of the generator is to make the discriminator believe every image should be
+            # labelled as 1
+            fake_outputs = netD(fake_inputs)
+            fake_targets = torch.ones([fake_inputs.shape[0], 1]).to(device)
+            g_loss = loss_function(fake_outputs.view(-1).unsqueeze(1), fake_targets)
+            g_optim.zero_grad()
+            g_loss.backward()
+            g_optim.step()
