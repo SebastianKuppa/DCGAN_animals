@@ -61,3 +61,7 @@ if __name__ == '__main__':
             g_optim.zero_grad()
             g_loss.backward()
             g_optim.step()
+
+            if idx % 5 == 0 or idx == len(train_loader):
+                print(f'Epoch {epoch} Iteration {idx}: discriminator loss {d_loss.item():.3f} '
+                      f'generator loss {g_loss.item():.3f} ')
