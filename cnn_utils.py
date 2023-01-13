@@ -18,7 +18,7 @@ def weights_init(m: torch.Tensor) -> None:
 
 
 class Discriminator(nn.Module):
-    def __init__(self, ngpu):
+    def __init__(self, ngpu, nc=3, ndf=6):
         super(Discriminator, self).__init__()
         self.ngpu = ngpu
         self.model = nn.Sequential(
@@ -47,7 +47,7 @@ class Discriminator(nn.Module):
 
 
 class Generator(nn.Module):
-    def __init__(self, ngpu):
+    def __init__(self, ngpu, nz=3, ngf=6, nc=3):
         self.ngpu = ngpu
         super(Generator, self).__init__()
         self.model = nn.Sequential(
