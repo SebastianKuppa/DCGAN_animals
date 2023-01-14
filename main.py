@@ -21,7 +21,7 @@ if __name__ == '__main__':
     d_optim = optim.Adam(netD.parameters(), lr=lr, betas=(0.5, 0.999))
     g_optim = optim.Adam(netG.parameters(), lr=lr, betas=(0.5, 0.999))
 
-    train_set = AnimalDataset()
+    train_set = AnimalDataset(root_dir='D:/datasets/afhq/afhq/train/cat/')
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
 
     for epoch in range(epochs):
