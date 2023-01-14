@@ -47,7 +47,7 @@ class Discriminator(nn.Module):
 
 
 class Generator(nn.Module):
-    def __init__(self, ngpu, nz=3, ngf=6, nc=3):
+    def __init__(self, ngpu, nz=100, ngf=6, nc=3):
         self.ngpu = ngpu
         super(Generator, self).__init__()
         self.model = nn.Sequential(
