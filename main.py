@@ -25,7 +25,7 @@ if __name__ == '__main__':
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
 
     for epoch in range(epochs):
-        for idx, (imgs,) in enumerate(train_loader):
+        for idx, imgs in enumerate(train_loader):
             # training the discriminator
             ###########################
             # take images from dataset and feed to discriminator
