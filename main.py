@@ -1,5 +1,6 @@
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+import numpy as np
 
 import torch.cuda
 from torch.utils.data import DataLoader
@@ -45,11 +46,13 @@ if __name__ == '__main__':
             noise = noise.to(device)
 
             fake_inputs = netG(noise)
-            if idx % 5 == 0 or idx == len(train_loader):
+            if idx == len(train_loader):
                 grid_img = torchvision.utils.make_grid(fake_inputs, nrow=8)
-                npimg = grid_img.numpy()
-                plt.imshow(np.transpose(npimg, (1, 2, 0)), interpolation='nearest')
+                # grid_img = grid_img.permute(1, 2, 0)
+                # npimg = grid_img.numpy()
+                # plt.imshow(np.transpose(npimg, (1, 2, 0)), interpolation='nearest')
                 # plt.imshow(grid_img.permute(1, 2, 0))
+                torchvision.transforms.ToPILImage()(grid_img).show()
 
             fake_outputs = netD(fake_inputs)
             fake_label = torch.zeros(fake_inputs.shape[0], 1).to(device)
