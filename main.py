@@ -12,7 +12,7 @@ lr = 0.0002
 
 if __name__ == '__main__':
     # init loss function
-    loss_function = nn.BCELoss()
+    Loss_function = nn.BCELoss()
 
     netD = Discriminator(ngpu=0)
     netG = Generator(ngpu=0)
@@ -46,8 +46,8 @@ if __name__ == '__main__':
                                 dim=0)
             targets = torch.cat((real_label, fake_label), dim=0)
 
-            d_loss = loss_function(outputs, targets)
             d_optim.zero_grad()
+            d_loss = Loss_function(outputs, targets)
             d_loss.backward()
             d_optim.step()
 
@@ -55,10 +55,14 @@ if __name__ == '__main__':
             ###########################
             # the goal of the generator is to make the discriminator believe every image should be
             # labelled as 1
+            noise = (torch.rand(real_inputs.shape[0], 100, 1, 1) - 0.5) / 0.5
+            noise = noise.to(device)
+            #         print(noise.shape)
+            fake_inputs = netG(noise)
             fake_outputs = netD(fake_inputs)
             fake_targets = torch.ones([fake_inputs.shape[0], 1]).to(device)
-            g_loss = loss_function(fake_outputs.view(-1).unsqueeze(1), fake_targets)
             g_optim.zero_grad()
+            g_loss = Loss_function(fake_outputs.view(-1).unsqueeze(1), fake_targets)
             g_loss.backward()
             g_optim.step()
 
